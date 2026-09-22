@@ -29,20 +29,15 @@ const server = http.createServer((req, res) => {
     }
 
     const cleanUrl = req.url.split('?')[0];
-    let filePath = path.join(__dirname, cleanUrl === '/' ? 'index.html' : cleanUrl);
+    const relPath = cleanUrl === '/' ? 'index.html' : cleanUrl.replace(/^\/+/, '');
+    let filePath = path.resolve(__dirname, relPath);
 
-    // Prevent directory traversal
-    if (!filePath.startsWith(__dirname)) {
-        res.writeHead(403);
-        res.end('Access denied');
-        return;
+    if (!fs.existsSync(filePath)) {
+        filePath = path.resolve(process.cwd(), relPath);
     }
-
-    fs.stat(filePath, (err, stats) => {
-        if (err || !stats.isFile()) {
-            // Fallback to index.html for SPA routing
-            filePath = path.join(__dirname, 'index.html');
-        }
+    if (!fs.existsSync(filePath)) {
+        filePath = path.resolve(__dirname, 'index.html');
+    }
 
         const ext = path.extname(filePath).toLowerCase();
         const contentType = MIME_TYPES[ext] || 'application/octet-stream';

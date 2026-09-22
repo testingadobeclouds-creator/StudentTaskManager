@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Student Task Management System — organize academic tasks with Firebase authentication",
   "scripts": {
-    "start": "node server.js",
+    "build": "echo 'Static build ready'",
     "dev": "node server.js"
   },
   "keywords": ["student", "task-manager", "firebase", "productivity"],
