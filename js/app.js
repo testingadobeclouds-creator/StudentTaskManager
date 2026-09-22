@@ -24,11 +24,36 @@ const STUDENT_QUOTES = [
 let currentQuoteIndex = 0;
 
 // Pomodoro Timer State
-const POMO_DURATIONS = {
-    focus: 25 * 60,
-    short: 5 * 60,
-    long: 15 * 60
-};
+const POMO_STORAGE_KEY = 'student-task-manager-pomo-durations';
+const POMO_DEFAULT_DURATIONS = { focus: 25 * 60, short: 5 * 60, long: 15 * 60 };
+
+function loadPomoDurations() {
+    try {
+        const saved = localStorage.getItem(POMO_STORAGE_KEY);
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            return {
+                focus: Math.max(1, Math.min(120, parseInt(parsed.focus) || 25)) * 60,
+                short: Math.max(1, Math.min(60,  parseInt(parsed.short) || 5))  * 60,
+                long:  Math.max(1, Math.min(120, parseInt(parsed.long)  || 15)) * 60
+            };
+        }
+    } catch (e) { /* ignore */ }
+    return { ...POMO_DEFAULT_DURATIONS };
+}
+
+function savePomoDurations(durationObj) {
+    try {
+        // store in minutes for readability
+        localStorage.setItem(POMO_STORAGE_KEY, JSON.stringify({
+            focus: Math.round(durationObj.focus / 60),
+            short: Math.round(durationObj.short / 60),
+            long:  Math.round(durationObj.long  / 60)
+        }));
+    } catch (e) { /* ignore */ }
+}
+
+let POMO_DURATIONS = loadPomoDurations();
 let pomoMode = 'focus';
 let pomoTimeRemaining = POMO_DURATIONS.focus;
 let pomoInterval = null;
@@ -394,8 +419,117 @@ function initScratchpad() {
 }
 
 // --------------------------------------------------------------------------
+// Pomodoro Settings Panel
+// --------------------------------------------------------------------------
+
+function updatePomodoroTabLabels() {
+    const focusMin = Math.round(POMO_DURATIONS.focus / 60);
+    const shortMin = Math.round(POMO_DURATIONS.short / 60);
+    const longMin  = Math.round(POMO_DURATIONS.long  / 60);
+
+    const focusBtn = document.getElementById('pomo-mode-focus');
+    const shortBtn = document.getElementById('pomo-mode-short');
+    const longBtn  = document.getElementById('pomo-mode-long');
+    if (focusBtn) focusBtn.textContent = `Focus (${focusMin}m)`;
+    if (shortBtn) shortBtn.textContent = `Short Break (${shortMin}m)`;
+    if (longBtn)  longBtn.textContent  = `Long Break (${longMin}m)`;
+}
+
+function initPomodoroSettings() {
+    const toggleBtn  = document.getElementById('pomo-settings-toggle');
+    const panel      = document.getElementById('pomo-settings-panel');
+    const saveBtn    = document.getElementById('pomo-settings-save');
+    const resetBtn   = document.getElementById('pomo-settings-reset-defaults');
+    const inputFocus = document.getElementById('pomo-input-focus');
+    const inputShort = document.getElementById('pomo-input-short');
+    const inputLong  = document.getElementById('pomo-input-long');
+
+    if (!toggleBtn || !panel) return;
+
+    // Populate inputs with current durations on first load
+    function syncInputsToCurrent() {
+        if (inputFocus) inputFocus.value = Math.round(POMO_DURATIONS.focus / 60);
+        if (inputShort) inputShort.value = Math.round(POMO_DURATIONS.short / 60);
+        if (inputLong)  inputLong.value  = Math.round(POMO_DURATIONS.long  / 60);
+    }
+
+    // Toggle panel open / close
+    toggleBtn.addEventListener('click', () => {
+        const isOpen = !panel.hidden;
+        panel.hidden = isOpen;
+        toggleBtn.setAttribute('aria-expanded', !isOpen);
+        if (!isOpen) syncInputsToCurrent(); // refresh inputs when opening
+    });
+
+    // Save & Apply
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            const focusVal = parseInt(inputFocus?.value, 10);
+            const shortVal = parseInt(inputShort?.value, 10);
+            const longVal  = parseInt(inputLong?.value,  10);
+
+            if (isNaN(focusVal) || focusVal < 1 || focusVal > 120 ||
+                isNaN(shortVal) || shortVal < 1 || shortVal > 60  ||
+                isNaN(longVal)  || longVal  < 1 || longVal  > 120) {
+                UI.showToast('Please enter valid durations (Focus: 1–120m, Breaks: 1–60m / 1–120m)', 'warning', 5000);
+                return;
+            }
+
+            // Stop any running timer before changing durations
+            if (pomoIsRunning) pausePomodoro();
+
+            // Apply new durations
+            POMO_DURATIONS.focus = focusVal * 60;
+            POMO_DURATIONS.short = shortVal * 60;
+            POMO_DURATIONS.long  = longVal  * 60;
+
+            // Persist to localStorage
+            savePomoDurations(POMO_DURATIONS);
+
+            // Reset current timer to new duration for the active mode
+            pomoTimeRemaining = POMO_DURATIONS[pomoMode];
+            UI.renderPomodoro(pomoTimeRemaining, POMO_DURATIONS[pomoMode], pomoMode, pomoIsRunning, pomoCompletedCycles);
+
+            // Update mode-tab button labels
+            updatePomodoroTabLabels();
+
+            // Close the panel
+            panel.hidden = true;
+            toggleBtn.setAttribute('aria-expanded', 'false');
+
+            UI.showToast(`Timer updated! Focus: ${focusVal}m • Short: ${shortVal}m • Long: ${longVal}m`, 'success', 4000);
+        });
+    }
+
+    // Reset to defaults
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            if (pomoIsRunning) pausePomodoro();
+
+            POMO_DURATIONS.focus = POMO_DEFAULT_DURATIONS.focus;
+            POMO_DURATIONS.short = POMO_DEFAULT_DURATIONS.short;
+            POMO_DURATIONS.long  = POMO_DEFAULT_DURATIONS.long;
+
+            localStorage.removeItem(POMO_STORAGE_KEY);
+
+            pomoTimeRemaining = POMO_DURATIONS[pomoMode];
+            UI.renderPomodoro(pomoTimeRemaining, POMO_DURATIONS[pomoMode], pomoMode, pomoIsRunning, pomoCompletedCycles);
+
+            updatePomodoroTabLabels();
+            syncInputsToCurrent();
+
+            UI.showToast('Timer reset to defaults (25 / 5 / 15 min)', 'info');
+        });
+    }
+
+    // Apply saved labels on init
+    updatePomodoroTabLabels();
+}
+
+// --------------------------------------------------------------------------
 // Quotes Cycle
 // --------------------------------------------------------------------------
+
 
 function cycleMotivationalQuote() {
     currentQuoteIndex = (currentQuoteIndex + 1) % STUDENT_QUOTES.length;
@@ -800,6 +934,10 @@ function initEventListeners() {
 
     const pomoLongBtn = document.getElementById('pomo-mode-long');
     if (pomoLongBtn) pomoLongBtn.addEventListener('click', () => setPomodoroMode('long'));
+
+    // Pomodoro Settings Panel
+    initPomodoroSettings();
+
 
     // Semester Goals Checklist
     const goalsList = document.getElementById('milestone-checklist');

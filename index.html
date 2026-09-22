@@ -540,10 +540,53 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                                 <h2>Study Focus Timer</h2>
                             </div>
-                            <span class="badge badge-status-pending" id="pomodoro-cycle-badge">Focus Session (25m)</span>
+                            <div class="pomodoro-header-right">
+                                <span class="badge badge-status-pending" id="pomodoro-cycle-badge">Focus Session (25m)</span>
+                                <button type="button" class="pomo-settings-btn" id="pomo-settings-toggle" title="Customize timer durations" aria-expanded="false" aria-controls="pomo-settings-panel">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                </button>
+                            </div>
                         </div>
                         <p class="dash-card-subtitle">Beat procrastination with structured deep-work study blocks</p>
-                        
+
+                        <!-- Collapsible Settings Panel -->
+                        <div class="pomo-settings-panel" id="pomo-settings-panel" hidden>
+                            <div class="pomo-settings-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                Customize Durations
+                            </div>
+                            <div class="pomo-settings-grid">
+                                <div class="pomo-setting-field">
+                                    <label for="pomo-input-focus">
+                                        <span class="pomo-setting-dot focus"></span>
+                                        Focus (min)
+                                    </label>
+                                    <input type="number" id="pomo-input-focus" min="1" max="120" value="25" aria-label="Focus session duration in minutes">
+                                </div>
+                                <div class="pomo-setting-field">
+                                    <label for="pomo-input-short">
+                                        <span class="pomo-setting-dot short"></span>
+                                        Short Break (min)
+                                    </label>
+                                    <input type="number" id="pomo-input-short" min="1" max="60" value="5" aria-label="Short break duration in minutes">
+                                </div>
+                                <div class="pomo-setting-field">
+                                    <label for="pomo-input-long">
+                                        <span class="pomo-setting-dot long"></span>
+                                        Long Break (min)
+                                    </label>
+                                    <input type="number" id="pomo-input-long" min="1" max="120" value="15" aria-label="Long break duration in minutes">
+                                </div>
+                            </div>
+                            <div class="pomo-settings-actions">
+                                <button type="button" class="btn btn-primary btn-sm" id="pomo-settings-save">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                                    Save &amp; Apply
+                                </button>
+                                <button type="button" class="pomo-reset-defaults-btn" id="pomo-settings-reset-defaults">Reset to defaults</button>
+                            </div>
+                        </div>
+
                         <div class="pomodoro-mode-switch">
                             <button type="button" class="pomo-tab-btn active" id="pomo-mode-focus" data-mode="focus">Focus (25m)</button>
                             <button type="button" class="pomo-tab-btn" id="pomo-mode-short" data-mode="short">Short Break (5m)</button>
@@ -574,6 +617,7 @@
                             </div>
                         </div>
                     </article>
+
 
                     <!-- Weekly Productivity Card with Streak -->
                     <article class="dash-card" id="weekly-productivity-card">
