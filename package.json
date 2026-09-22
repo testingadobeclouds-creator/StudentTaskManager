@@ -2,7 +2,6 @@
   "name": "student-task-manager",
   "version": "1.0.0",
   "description": "Student Task Management System — organize academic tasks with Firebase authentication",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
