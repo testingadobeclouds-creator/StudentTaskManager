@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Task Management System - Organize and track your academic tasks">
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header landing-hidden" id="app-header" style="display: none;">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-brand">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <span class="brand-text">TaskManager</span>
+            </div>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+            <ul class="nav-menu" id="nav-menu" role="menubar">
+                <li role="none"><a href="#landing" class="nav-link active" role="menuitem" data-section="landing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a></li>
+                <li role="none"><a href="#dashboard" class="nav-link" role="menuitem" data-section="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Dashboard</span></a></li>
+                <li role="none"><a href="#tasks" class="nav-link" role="menuitem" data-section="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Tasks</span></a></li>
+                <li role="none"><a href="#add-task" class="nav-link" role="menuitem" data-section="add-task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Add Task</span></a></li>
+                <li role="none"><a href="#about" class="nav-link" role="menuitem" data-section="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span>About</span></a></li>
+            </ul>
+            <div class="nav-right-actions">
+                <div class="nav-auth" id="nav-auth">
+                    <button type="button" class="btn btn-secondary btn-sm" id="nav-login-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        <span>Sign In</span>
+                    </button>
+                    <div class="user-profile-menu" id="user-profile-menu" hidden>
+                        <button type="button" class="user-avatar-btn" id="user-avatar-btn" aria-label="User account menu" aria-expanded="false">
+                            <span class="user-initials" id="user-initials">U</span>
+                        </button>
+                        <div class="user-dropdown" id="user-dropdown" hidden>
+                            <div class="dropdown-header">
+                                <p class="user-name" id="dropdown-user-name">Student</p>
+                                <p class="user-email" id="dropdown-user-email">student@example.com</p>
+                                <span class="badge badge-guest" id="dropdown-user-badge">Guest Session</span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button type="button" class="dropdown-item" id="dropdown-logout-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                <span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main" role="main">
+        <section id="landing" class="section active" aria-labelledby="landing-hero-heading">
+            <!-- Hero Section -->
+            <div class="landing-hero">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    <span>Academic Year 2025–26 • Productivity Suite</span>
+                </div>
+                <h1 class="hero-title" id="landing-hero-heading">
+                    Master Your Academic Journey with <span class="text-gradient">Precision & Speed</span>
+                </h1>
+                <p class="hero-subtitle">
+                    The ultra-fast, offline-first task tracker built specifically for polytechnic and engineering students. Track lab assignments, viva schedules, term projects, and exams with zero distractions and Google Firebase integration.
+                </p>
+                <div class="landing-floating-theme">
+                    <button class="theme-toggle" id="landing-theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+                        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                </div>
+                <div class="hero-actions">
+                    <button type="button" class="btn btn-primary btn-lg" id="landing-get-started">
+                        <span>Get Started Free</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="landing-explore-dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        <span>Explore Dashboard</span>
+                    </button>
+                    <button type="button" class="btn btn-google-outline btn-lg" id="landing-google-btn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
+                            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+                            <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.8 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/>
+                            <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
+                        </svg>
+                        <span>Sign In with Google</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="landing-hero-signin">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                        <span>Sign In</span>
+                    </button>
+                </div>
+
+                <div class="hero-stats-row">
+                    <div class="hero-stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-text">Offline LocalStorage</span>
+                    </div>
+                    <div class="hero-stat-sep"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number">⚡ 0ms</span>
+                        <span class="stat-text">Instant Response</span>
+                    </div>
+                    <div class="hero-stat-sep"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number">Firebase</span>
+                        <span class="stat-text">Cloud Auth Ready</span>
+                    </div>
+                    <div class="hero-stat-sep"></div>
+                    <div class="hero-stat-item">
+                        <span class="stat-number">No Ads</span>
+                        <span class="stat-text">Zero Distractions</span>
+                    </div>
+                </div>
+
+                <!-- Glassmorphism Live Preview Window with Interactive Tabs -->
+                <div class="hero-preview-wrapper">
+                    <div class="hero-preview-window">
+                        <div class="window-bar">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="window-title">Student Task Manager • Live Interactive Mockup</span>
+                            <div class="window-demo-tabs">
+                                <button type="button" class="demo-tab-btn active" data-preview-tab="tasks">Tasks Flow</button>
+                                <button type="button" class="demo-tab-btn" data-preview-tab="analytics">Subject Matrix</button>
+                                <button type="button" class="demo-tab-btn" data-preview-tab="timer">Focus Mode</button>
+                            </div>
+                        </div>
+
+                        <!-- Tab 1: Live Tasks View -->
+                        <div class="preview-content" id="preview-tab-content-tasks">
+                            <div class="preview-metric-pills">
+                                <span class="preview-pill"><strong id="preview-pending-count">4</strong> Pending Tasks</span>
+                                <span class="preview-pill success"><strong id="preview-completed-count">2</strong> Completed</span>
+                                <span class="preview-pill warning">⚡ Midterm Week Active</span>
+                                <span class="preview-pill info">🔥 4-Day Streak</span>
+                            </div>
+                            <div class="preview-task-row">
+                                <span class="preview-check active">✓</span>
+                                <div class="preview-task-info">
+                                    <span class="preview-task-title">Complete Operating System Simulation File</span>
+                                    <span class="preview-task-sub">Operating Systems • Due Today</span>
+                                </div>
+                                <span class="badge badge-priority-high">High Priority</span>
+                            </div>
+                            <div class="preview-task-row">
+                                <span class="preview-check in-prog">-</span>
+                                <div class="preview-task-info">
+                                    <span class="preview-task-title">Software Engineering Presentation Slides</span>
+                                    <span class="preview-task-sub">Software Engineering • In Progress</span>
+                                </div>
+                                <span class="badge badge-priority-medium">Medium</span>
+                            </div>
+                            <div class="preview-task-row">
+                                <span class="preview-check">-</span>
+                                <div class="preview-task-info">
+                                    <span class="preview-task-title">Database Normalization Practical Queries</span>
+                                    <span class="preview-task-sub">DBMS • Due Tomorrow</span>
+                                </div>
+                                <span class="badge badge-priority-high">High Priority</span>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Analytics View (Hidden by default) -->
+                        <div class="preview-content" id="preview-tab-content-analytics" hidden>
+                            <div class="preview-analytics-grid">
+                                <div class="preview-analytics-card">
+                                    <span class="analytics-label">Operating Systems</span>
+                                    <div class="analytics-bar-bg"><div class="analytics-bar-fill" style="width: 80%;"></div></div>
+                                    <span class="analytics-value">4/5 Lab Reports (80%)</span>
+                                </div>
+                                <div class="preview-analytics-card">
+                                    <span class="analytics-label">Database Management</span>
+                                    <div class="analytics-bar-bg"><div class="analytics-bar-fill" style="width: 66%;"></div></div>
+                                    <span class="analytics-value">2/3 Queries Done (66%)</span>
+                                </div>
+                                <div class="preview-analytics-card">
+                                    <span class="analytics-label">Computer Networks</span>
+                                    <div class="analytics-bar-bg"><div class="analytics-bar-fill" style="width: 100%;"></div></div>
+                                    <span class="analytics-value">3/3 Practical Files (100%)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Focus Mode (Hidden by default) -->
+                        <div class="preview-content" id="preview-tab-content-timer" hidden>
+                            <div class="preview-timer-box">
+                                <div class="preview-timer-clock">25:00</div>
+                                <div class="preview-timer-label">Study Focus Session • Deep Work Mode</div>
+                                <div class="preview-timer-tags">
+                                    <span class="badge badge-status-completed">⚡ 4 Cycles Planned</span>
+                                    <span class="badge badge-priority-high">Operating Systems Chapter 4</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Showcase -->
+            <div class="landing-section">
+                <div class="section-title-wrap">
+                    <span class="section-pretitle">Engineered for Academic Success</span>
+                    <h2 class="section-main-title">Everything You Need to Ace Your Semester</h2>
+                    <p class="section-desc">Designed with real diploma and engineering student workflows in mind. Zero fluff, maximum clarity.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <h3>Subject Progress Analytics</h3>
+                        <p>Track completion percentage per subject like OS, DBMS, Networks, and balance your syllabus workload.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon bg-amber">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <h3>Urgent Deadlines & Countdown</h3>
+                        <p>Visual countdown tags compute relative submission time ("Today", "Tomorrow", "Overdue") automatically.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon bg-green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        </div>
+                        <h3>Weekly Activity Visualizer</h3>
+                        <p>Dynamic 7-day productivity bar chart provides instant feedback on daily study streak and momentum.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon bg-purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <h3>Interactive Study Focus Timer</h3>
+                        <p>Built-in 25-minute focus cycles keep procrastination at bay during tough lab writeups and coding tasks.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon bg-red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <h3>Priority Matrix & Filters</h3>
+                        <p>Filter by status and priorities in real-time. Status cycling advances tasks with single clicks.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon bg-teal">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+                        </div>
+                        <h3>Offline-First + Firebase Ready</h3>
+                        <p>Never lose tasks during patchy lab Wi-Fi. Sync with Google Firebase Authentication when connected.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow Steps -->
+            <div class="landing-section bg-subtle">
+                <div class="section-title-wrap">
+                    <span class="section-pretitle">Effortless Routine</span>
+                    <h2 class="section-main-title">How It Powers Your Daily Study Routine</h2>
+                </div>
+                <div class="workflow-steps">
+                    <div class="step-card">
+                        <div class="step-number">01</div>
+                        <h3>Quick Capture</h3>
+                        <p>Enter assignments, lab practicals, and reading tasks directly from the dashboard quick-add widget.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">02</div>
+                        <h3>Focus & Execute</h3>
+                        <p>Use the study focus timer and daily time slots to conquer high-priority tasks without burn-out.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">03</div>
+                        <h3>Conquer Deadlines</h3>
+                        <p>Cycle tasks to completed, watch your subject progress bars rise, and submit projects on time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Comparison Table -->
+            <div class="landing-section">
+                <div class="section-title-wrap">
+                    <span class="section-pretitle">The Clear Advantage</span>
+                    <h2 class="section-main-title">Why Students Choose TaskManager</h2>
+                    <p class="section-desc">See the difference compared to traditional disorganized study habits.</p>
+                </div>
+                <div class="comparison-table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature / Workflow</th>
+                                <th class="col-traditional">The Old Way (Notebooks / Groups)</th>
+                                <th class="col-taskmanager">TaskManager Suite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Deadline Awareness</strong></td>
+                                <td>Lost in cluttered WhatsApp messages & blackboard photos</td>
+                                <td class="highlight-cell">✓ Instant dynamic countdown badges (Today, Tomorrow, Overdue)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Subject Coverage</strong></td>
+                                <td>No idea which practicals are lagging before viva week</td>
+                                <td class="highlight-cell">✓ Real-time progress bars for each subject</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Focus & Study Sessions</strong></td>
+                                <td>Frequent phone checks and endless procrastination</td>
+                                <td class="highlight-cell">✓ Built-in Study Focus Timer right on the dashboard</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Offline Availability</strong></td>
+                                <td>Web apps fail in college basement labs without Wi-Fi</td>
+                                <td class="highlight-cell">✓ 100% offline-ready with local browser persistence</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cloud Security</strong></td>
+                                <td>Manual paper notes get lost or damaged</td>
+                                <td class="highlight-cell">✓ Google Firebase authentication with 1-click cloud portability</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Student Testimonials -->
+            <div class="landing-section bg-subtle">
+                <div class="section-title-wrap">
+                    <span class="section-pretitle">Student Feedback</span>
+                    <h2 class="section-main-title">Trusted for Academic Submissions</h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"Finally a task manager without distracting ads or subscription traps! It works in our college labs where Wi-Fi is patchy."</p>
+                        <div class="student-meta">
+                            <div class="student-avatar">AK</div>
+                            <div>
+                                <h4>Aman Kumar</h4>
+                                <span>Diploma in Computer Engineering</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"The subject progress breakdown saved my semester. I could clearly see which practicals were lagging before viva week."</p>
+                        <div class="student-meta">
+                            <div class="student-avatar">PS</div>
+                            <div>
+                                <h4>Priya Sharma</h4>
+                                <span>B.Tech Information Technology</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"The study focus timer on the dashboard keeps me focused during late night coding practicals. The quick notes scratchpad is a lifesaver!"</p>
+                        <div class="student-meta">
+                            <div class="student-avatar">RV</div>
+                            <div>
+                                <h4>Rohit Verma</h4>
+                                <span>Polytechnic Final Year</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student FAQs -->
+            <div class="landing-section">
+                <div class="section-title-wrap">
+                    <span class="section-pretitle">Got Questions?</span>
+                    <h2 class="section-main-title">Frequently Asked Questions</h2>
+                </div>
+                <div class="faq-accordion">
+                    <details class="faq-item" open>
+                        <summary class="faq-question">Does it work without an internet connection?</summary>
+                        <div class="faq-answer">
+                            <p>Yes! The entire application is offline-first. All your tasks, subjects, notes, and study stats are stored securely in your browser's LocalStorage and load instantaneously.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">How does Google Firebase Authentication work?</summary>
+                        <div class="faq-answer">
+                            <p>You can sign in securely using Google or your email. Once you paste your Firebase credentials into <code>js/firebase-config.js</code>, authentication seamlessly connects to Google's cloud infrastructure.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">Can I backup or export my tasks?</summary>
+                        <div class="faq-answer">
+                            <p>Absolutely. You can export your entire database to a JSON file at any time with a single click, and restore it on any device or browser.</p>
+                        </div>
+                    </details>
+                    <details class="faq-item">
+                        <summary class="faq-question">Is this app free to use?</summary>
+                        <div class="faq-answer">
+                            <p>Yes, it is 100% free and open, built specifically for students with zero advertisements and zero subscription paywalls.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- CTA Banner -->
+            <div class="landing-cta-banner">
+                <h2>Take Full Control of Your Semester</h2>
+                <p>Zero bloat, instant performance, and fully privacy-respecting. Get started in your browser right now.</p>
+                <div class="hero-actions">
+                    <button type="button" class="btn btn-primary btn-lg" id="landing-cta-btn">
+                        <span>Launch Task Manager</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-lg" id="landing-cta-signup">
+                        <span>Create Account</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section" aria-labelledby="dashboard-heading">
+            <!-- Greeting & Quick Action Banner -->
+            <div class="dashboard-greeting-banner" id="dashboard-greeting-banner">
+                <div class="greeting-text-wrap">
+                    <span class="greeting-date" id="greeting-date">Today</span>
+                    <h1 class="greeting-title" id="greeting-title">Welcome Back! 👋</h1>
+                    <div class="greeting-quote-row">
+                        <p class="greeting-quote" id="greeting-quote">"Success is the sum of small efforts, repeated day in and day out."</p>
+                        <button type="button" class="quote-refresh-btn" id="quote-refresh-btn" title="New motivational quote" aria-label="New quote">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="greeting-actions">
+                    <div class="greeting-progress-pill" id="greeting-progress-pill">
+                        <div class="progress-pill-header">
+                            <span class="pill-dot"></span>
+                            <span id="greeting-summary-text">0/0 completed today</span>
+                            <span class="pill-pct" id="greeting-completion-rate">0%</span>
+                        </div>
+                        <div class="pill-bar-bg">
+                            <div class="pill-bar-fill" id="greeting-progress-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                    <div class="greeting-btn-group">
+                        <button type="button" class="btn btn-primary" id="dashboard-add-task" aria-label="Add new task">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Add Task</span>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="dashboard-focus-mode" title="Jump to Focus Timer">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <span>Focus Timer</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8 Stats Cards Grid -->
+            <div class="stats-grid" id="stats-grid" role="region" aria-label="Task statistics">
+                <article class="stat-card" data-stat="total">
+                    <div class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-total">0</span>
+                        <span class="stat-label">Total Tasks</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="pending">
+                    <div class="stat-icon pending" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-pending">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="in-progress">
+                    <div class="stat-icon in-progress" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-inprogress">0</span>
+                        <span class="stat-label">In Progress</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="completed">
+                    <div class="stat-icon completed" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-completed">0</span>
+                        <span class="stat-label">Completed</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="high-priority">
+                    <div class="stat-icon high-priority" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-high">0</span>
+                        <span class="stat-label">High Priority</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="today">
+                    <div class="stat-icon today" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-today">0</span>
+                        <span class="stat-label">Due Today</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="upcoming">
+                    <div class="stat-icon upcoming" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-week">0</span>
+                        <span class="stat-label">This Week</span>
+                    </div>
+                </article>
+                <article class="stat-card" data-stat="overdue">
+                    <div class="stat-icon overdue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+                    <div class="stat-content">
+                        <span class="stat-value" id="stat-overdue">0</span>
+                        <span class="stat-label">Overdue</span>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Dashboard 2-Column Grid -->
+            <div class="dashboard-grid">
+                <!-- Left Column (Pomodoro Timer, Weekly Chart, Urgent Deadlines, Semester Goals, Activity Feed) -->
+                <div class="dashboard-col">
+                    <!-- Interactive Study Focus Timer Widget -->
+                    <article class="dash-card pomodoro-card" id="pomodoro-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <h2>Study Focus Timer</h2>
+                            </div>
+                            <span class="badge badge-status-pending" id="pomodoro-cycle-badge">Focus Session (25m)</span>
+                        </div>
+                        <p class="dash-card-subtitle">Beat procrastination with structured deep-work study blocks</p>
+                        
+                        <div class="pomodoro-mode-switch">
+                            <button type="button" class="pomo-tab-btn active" id="pomo-mode-focus" data-mode="focus">Focus (25m)</button>
+                            <button type="button" class="pomo-tab-btn" id="pomo-mode-short" data-mode="short">Short Break (5m)</button>
+                            <button type="button" class="pomo-tab-btn" id="pomo-mode-long" data-mode="long">Long Break (15m)</button>
+                        </div>
+
+                        <div class="pomodoro-clock-wrap">
+                            <div class="pomodoro-clock-face">
+                                <span class="pomodoro-time" id="pomodoro-timer-display">25:00</span>
+                                <span class="pomodoro-label" id="pomodoro-mode-label">Deep Study Block</span>
+                            </div>
+                            <div class="pomodoro-progress-track">
+                                <div class="pomodoro-progress-bar" id="pomodoro-progress-bar" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="pomodoro-controls">
+                            <button type="button" class="btn btn-primary btn-lg" id="pomodoro-start-pause">
+                                <svg viewBox="0 0 24 24" fill="currentColor" id="pomodoro-btn-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <span id="pomodoro-btn-text">Start Focus</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="pomodoro-reset" title="Reset Timer">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                <span>Reset</span>
+                            </button>
+                            <div class="pomodoro-stats-chip" id="pomodoro-session-count">
+                                <span>Completed: <strong id="pomodoro-completed-count">0</strong> cycles</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Weekly Productivity Card with Streak -->
+                    <article class="dash-card" id="weekly-productivity-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                                <h2>Weekly Task Activity</h2>
+                            </div>
+                            <div class="card-header-badges">
+                                <span class="badge badge-streak" id="weekly-streak-badge">🔥 4-Day Streak</span>
+                                <span class="badge badge-status-completed" id="weekly-completion-rate">0% Completed</span>
+                            </div>
+                        </div>
+                        <p class="dash-card-subtitle">Tasks completed vs scheduled across the last 7 days</p>
+                        <div class="chart-container" id="weekly-chart-container">
+                            <!-- SVG Bar Chart dynamically injected here -->
+                        </div>
+                    </article>
+
+                    <!-- Urgent & Upcoming Deadlines Card with 1-Click Complete -->
+                    <article class="dash-card" id="upcoming-deadlines-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <h2>Urgent & Upcoming Deadlines</h2>
+                            </div>
+                            <a href="#tasks" class="dash-card-link" data-section="tasks">View All Tasks &rarr;</a>
+                        </div>
+                        <p class="dash-card-subtitle">Prioritized submissions requiring immediate attention</p>
+                        <div class="upcoming-deadlines-list" id="upcoming-deadlines-list">
+                            <!-- Injected by UI.renderUpcomingDeadlines with 1-click completion -->
+                        </div>
+                    </article>
+
+                    <!-- Semester Milestones & Lab Goals Tracker -->
+                    <article class="dash-card" id="semester-goals-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                <h2>Semester Goals & Milestones</h2>
+                            </div>
+                            <span class="badge badge-priority-medium" id="milestone-percentage-badge">0% Reached</span>
+                        </div>
+                        <p class="dash-card-subtitle">High-level academic checkpoints for midterm and final submissions</p>
+                        
+                        <div class="milestone-progress-bar-wrap">
+                            <div class="milestone-bar-fill" id="milestone-bar-fill" style="width: 0%;"></div>
+                        </div>
+
+                        <div class="milestone-checklist" id="milestone-checklist">
+                            <!-- Injected via JavaScript from localStorage -->
+                        </div>
+
+                        <form class="milestone-add-form" id="milestone-add-form">
+                            <input type="text" id="milestone-input" placeholder="+ Add a semester checkpoint (e.g., OS Manual)" required maxlength="80">
+                            <button type="submit" class="btn btn-secondary btn-sm">Add</button>
+                        </form>
+                    </article>
+
+                    <!-- Recent Activity Feed -->
+                    <article class="dash-card" id="recent-activity-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                <h2>Recent Activity Timeline</h2>
+                            </div>
+                        </div>
+                        <p class="dash-card-subtitle">Latest changes and task milestones</p>
+                        <div class="activity-timeline" id="activity-timeline">
+                            <!-- Injected by UI.renderRecentActivities -->
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Right Column (Quick Add, Today's Schedule, Subject Progress, Priority Matrix, Scratchpad, Study Tips) -->
+                <div class="dashboard-col">
+                    <!-- Quick Add Mini Card -->
+                    <article class="dash-card quick-add-card" id="quick-add-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <h2>Quick Add Task</h2>
+                            </div>
+                        </div>
+                        <form id="quick-add-form" class="quick-add-form" novalidate>
+                            <div class="quick-form-group">
+                                <input type="text" id="quick-task-title" placeholder="Task title (e.g. Lab report 4)" required maxlength="100" autocomplete="off">
+                            </div>
+                            <div class="quick-form-row">
+                                <input type="text" id="quick-task-subject" placeholder="Subject (e.g. OS)" required maxlength="50" autocomplete="off">
+                                <input type="date" id="quick-task-date" required>
+                            </div>
+                            <div class="quick-form-row-actions">
+                                <select id="quick-task-priority" aria-label="Quick task priority">
+                                    <option value="high">High Priority</option>
+                                    <option value="medium" selected>Medium Priority</option>
+                                    <option value="low">Low Priority</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm" id="quick-add-submit">
+                                    <span>Add</span>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                </button>
+                            </div>
+                        </form>
+                    </article>
+
+                    <!-- Today's Study Schedule & Time Blocks -->
+                    <article class="dash-card" id="today-schedule-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                <h2>Today's Time Slots</h2>
+                            </div>
+                            <span class="badge badge-status-in-progress">Schedule</span>
+                        </div>
+                        <p class="dash-card-subtitle">Organize your study routine by morning, afternoon, and evening</p>
+                        
+                        <div class="time-slots-container" id="time-slots-container">
+                            <!-- Injected via UI.renderTodayTimeSlots -->
+                        </div>
+                    </article>
+
+                    <!-- Subject Progress Breakdown -->
+                    <article class="dash-card" id="subject-progress-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                                <h2>Subject Progress</h2>
+                            </div>
+                        </div>
+                        <p class="dash-card-subtitle">Completion breakdown across enrolled academic subjects</p>
+                        <div class="subject-progress-list" id="subject-progress-list">
+                            <!-- Injected by UI.renderSubjectBreakdown -->
+                        </div>
+                    </article>
+
+                    <!-- Priority Distribution Card -->
+                    <article class="dash-card" id="priority-distribution-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                                <h2>Priority Distribution</h2>
+                            </div>
+                        </div>
+                        <div class="priority-split-bar" id="priority-split-bar">
+                            <div class="split-segment high" id="split-high" style="width: 0%"></div>
+                            <div class="split-segment medium" id="split-medium" style="width: 0%"></div>
+                            <div class="split-segment low" id="split-low" style="width: 0%"></div>
+                        </div>
+                        <div class="priority-legend" id="priority-legend">
+                            <span class="legend-item"><span class="legend-dot high"></span> High: <strong id="legend-high-val">0</strong></span>
+                            <span class="legend-item"><span class="legend-dot medium"></span> Med: <strong id="legend-med-val">0</strong></span>
+                            <span class="legend-item"><span class="legend-dot low"></span> Low: <strong id="legend-low-val">0</strong></span>
+                        </div>
+                    </article>
+
+                    <!-- Student Quick Scratchpad & Lecture Notes Widget -->
+                    <article class="dash-card scratchpad-card" id="scratchpad-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-title-wrap">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                <h2>Quick Study Scratchpad</h2>
+                            </div>
+                            <div class="scratchpad-actions">
+                                <button type="button" class="btn-icon" id="scratchpad-copy-btn" title="Copy Notes">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                </button>
+                                <button type="button" class="btn-icon" id="scratchpad-clear-btn" title="Clear Scratchpad">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="dash-card-subtitle">Quickly jot formulas, professor hints, or viva reminders (auto-saved)</p>
+                        <textarea id="scratchpad-input" class="scratchpad-textarea" rows="4" placeholder="Type quick lecture notes, exam tips, or practical reminders here..."></textarea>
+                        <div class="scratchpad-footer">
+                            <span class="scratchpad-saved-badge" id="scratchpad-status">✓ Auto-saved locally</span>
+                            <span class="scratchpad-count" id="scratchpad-count">0 characters</span>
+                        </div>
+                    </article>
+
+                    <!-- Study Tip Card -->
+                    <article class="dash-card tip-card" id="study-tip-card">
+                        <div class="tip-card-header">
+                            <span class="tip-badge">💡 Study Technique</span>
+                            <button type="button" class="tip-refresh-btn" id="tip-refresh-btn" title="Next study technique" aria-label="Next tip">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </button>
+                        </div>
+                        <h3 class="tip-title" id="tip-title">The 25/5 Study Focus Method</h3>
+                        <p class="tip-text" id="tip-text">Study with 100% focus for 25 minutes, then take a 5-minute break. After 4 cycles, take a longer 20-minute rest to keep mental stamina high.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="tasks" class="section" aria-labelledby="tasks-heading">
+            <div class="section-header">
+                <h1 id="tasks-heading">Tasks</h1>
+                <p class="section-subtitle">Manage and organize your tasks</p>
+            </div>
+            <div class="tasks-toolbar">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="search" id="search-input" placeholder="Search tasks..." aria-label="Search tasks by title, description, or subject" autocomplete="off">
+                </div>
+                <div class="filter-group">
+                    <label for="status-filter" class="visually-hidden">Filter by status</label>
+                    <select id="status-filter" aria-label="Filter by status">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    <label for="priority-filter" class="visually-hidden">Filter by priority</label>
+                    <select id="priority-filter" aria-label="Filter by priority">
+                        <option value="all">All Priorities</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <label for="sort-select" class="visually-hidden">Sort by</label>
+                    <select id="sort-select" aria-label="Sort tasks">
+                        <option value="recent">Recently Added</option>
+                        <option value="due-date">Due Date</option>
+                        <option value="priority">Priority</option>
+                        <option value="status">Status</option>
+                    </select>
+                </div>
+                <div class="toolbar-actions">
+                    <button type="button" class="btn btn-secondary" id="export-tasks-btn" title="Export tasks to JSON">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Export</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="import-tasks-btn" title="Import tasks from JSON">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <span>Import</span>
+                    </button>
+                    <input type="file" id="import-file-input" accept=".json,application/json" class="visually-hidden" aria-label="Select JSON file to import">
+                    <button type="button" class="btn btn-secondary btn-clear" id="clear-all-btn" title="Clear all tasks">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                        <span>Clear All</span>
+                    </button>
+                </div>
+            </div>
+            <div class="tasks-container" id="tasks-container" role="list" aria-label="Task list">
+                <div class="empty-state" id="empty-state" hidden>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    <h2>No tasks found</h2>
+                    <p>Add your first task to get started</p>
+                    <div class="empty-state-actions">
+                        <button class="btn btn-primary" id="empty-add-task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Add Task</span></button>
+                        <button class="btn btn-secondary" id="empty-load-sample"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><span>Load Sample Tasks</span></button>
+                    </div>
+                </div>
+                <ul class="task-list" id="task-list" role="list" hidden></ul>
+            </div>
+        </section>
+
+        <section id="add-task" class="section" aria-labelledby="add-task-heading">
+            <div class="section-header">
+                <h1 id="add-task-heading">Add New Task</h1>
+                <p class="section-subtitle">Create a new task to track</p>
+            </div>
+            <form id="task-form" class="task-form" novalidate>
+                <div class="form-group">
+                    <label for="task-title">Task Title <span class="required" aria-hidden="true">*</span></label>
+                    <input type="text" id="task-title" name="title" required maxlength="100" placeholder="Enter task title" autocomplete="off" aria-describedby="title-error">
+                    <span class="error-message" id="title-error" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                    <label for="task-description">Description</label>
+                    <textarea id="task-description" name="description" rows="4" maxlength="500" placeholder="Enter task description (optional)"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-subject">Subject / Category <span class="required" aria-hidden="true">*</span></label>
+                        <input type="text" id="task-subject" name="subject" required maxlength="50" placeholder="e.g., Operating Systems" autocomplete="off" aria-describedby="subject-error">
+                        <span class="error-message" id="subject-error" aria-live="polite"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-due-date">Due Date <span class="required" aria-hidden="true">*</span></label>
+                        <input type="date" id="task-due-date" name="dueDate" required aria-describedby="dueDate-error">
+                        <span class="error-message" id="dueDate-error" aria-live="polite"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="task-priority">Priority <span class="required" aria-hidden="true">*</span></label>
+                        <select id="task-priority" name="priority" required aria-describedby="priority-error">
+                            <option value="">Select priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <span class="error-message" id="priority-error" aria-live="polite"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-status">Status <span class="required" aria-hidden="true">*</span></label>
+                        <select id="task-status" name="status" required aria-describedby="status-error">
+                            <option value="pending" selected>Pending</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                        <span class="error-message" id="status-error" aria-live="polite"></span>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="reset-form">Reset</button>
+                    <button type="submit" class="btn btn-primary" id="submit-task">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        <span>Save Task</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="about" class="section" aria-labelledby="about-heading">
+            <div class="section-header">
+                <h1 id="about-heading">About</h1>
+                <p class="section-subtitle">Learn more about this application</p>
+            </div>
+            <div class="about-content">
+                <article class="about-card">
+                    <h2>Student Task Management System</h2>
+                    <p>A lightweight, offline-capable web application for students to organize and track academic and personal tasks.</p>
+                </article>
+                <article class="about-card">
+                    <h3>Features</h3>
+                    <ul>
+                        <li>Create, edit, and delete tasks</li>
+                        <li>Mark tasks as complete/in-progress/pending</li>
+                        <li>Set priorities (Low, Medium, High)</li>
+                        <li>Search and filter tasks</li>
+                        <li>Sort by due date, priority, status, or recent</li>
+                        <li>Dashboard with statistics</li>
+                        <li>Dark/Light mode</li>
+                        <li>Data persists in browser LocalStorage</li>
+                        <li>Works offline after first load</li>
+                        <li>Fully responsive for mobile and desktop</li>
+                    </ul>
+                </article>
+                <article class="about-card">
+                    <h3>Technologies</h3>
+                    <ul>
+                        <li>HTML5 - Semantic markup</li>
+                        <li>CSS3 - Custom properties, Grid, Flexbox</li>
+                        <li>Vanilla JavaScript (ES6+)</li>
+                        <li>LocalStorage API</li>
+                    </ul>
+                </article>
+                <article class="about-card">
+                    <h3>Data Privacy</h3>
+                    <p>All data is stored locally in your browser. No data is sent to any server. Your tasks remain private and under your control.</p>
+                </article>
+                <article class="about-card">
+                    <h3>Developer</h3>
+                    <p>Built as a 12-week Web Development Internship project.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <p>Student Task Management System &copy; 2025</p>
+    </footer>
+
+    <div class="toast-container" id="toast-container" aria-live="polite" aria-label="Notifications"></div>
+
+    <!-- Auth Modal (Login / Sign Up) -->
+    <dialog class="auth-modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+        <div class="auth-modal-content">
+            <div class="auth-modal-header">
+                <div class="auth-brand">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                    <span class="brand-text" id="auth-modal-title">TaskManager Account</span>
+                </div>
+                <button type="button" class="auth-close-btn" id="auth-modal-close" aria-label="Close dialog">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <div class="auth-tabs" role="tablist">
+                <button type="button" class="auth-tab active" id="tab-login" role="tab" aria-selected="true" data-tab="login">Log In</button>
+                <button type="button" class="auth-tab" id="tab-signup" role="tab" aria-selected="false" data-tab="signup">Create Account</button>
+            </div>
+
+            <form id="auth-form" class="auth-form" novalidate>
+                <div class="form-group" id="auth-name-group" hidden>
+                    <label for="auth-name">Full Name</label>
+                    <input type="text" id="auth-name" placeholder="e.g. Himanshu Kumar" autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="auth-email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="auth-email" placeholder="student@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Password <span class="required">*</span></label>
+                    <input type="password" id="auth-password" placeholder="At least 6 characters" required autocomplete="current-password">
+                </div>
+                <div class="auth-error-message" id="auth-error" aria-live="polite"></div>
+                <button type="submit" class="btn btn-primary btn-block" id="auth-submit-btn">
+                    <span>Log In</span>
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="auth-social-actions">
+                <button type="button" class="btn btn-google btn-block" id="google-login-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                        <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
+                        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+                        <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.8 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/>
+                        <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16C3.7 19.7 7.5 23 12 23z"/>
+                    </svg>
+                    <span>Continue with Google</span>
+                </button>
+                <button type="button" class="btn btn-secondary btn-block" id="guest-login-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+                    <span>Continue as Guest (Offline Mode)</span>
+                </button>
+            </div>
+
+            <div class="auth-firebase-notice">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Google Firebase Auth integrated. Credentials can be configured in <code>js/firebase-config.js</code>.</span>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="confirm-dialog" id="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+        <div class="dialog-content">
+            <h3 id="dialog-title">Confirm Action</h3>
+            <p id="dialog-message">Are you sure you want to proceed?</p>
+            <div class="dialog-actions">
+                <button class="btn btn-secondary" id="dialog-cancel">Cancel</button>
+                <button class="btn btn-danger" id="dialog-confirm">Confirm</button>
+            </div>
+        </div>
+    </dialog>
+
+    <div class="overlay" id="overlay" hidden></div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
